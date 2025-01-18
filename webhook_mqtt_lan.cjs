@@ -28,7 +28,7 @@ client.on('message', (topic, message) => {
         const correlationId = payload.correlationId;
         const req_data = payload.data;
 
-        console.log(req_data.headers)
+        
         // 处理数据（这里以简单的回显为例）
         const responseData = {
             correlationId,
