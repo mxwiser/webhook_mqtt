@@ -15,7 +15,7 @@ aedes.on('subscribe', function (subscriptions, client) {
 
 // 处理发布事件
 aedes.on('publish', function (packet, client) {
-    console.log(`Received message: ${packet.payload.toString()} on topic ${packet.topic}`);
+    console.log(`Received message:  on topic ${packet.topic}`);
 });
 
 module.exports.aedes=aedes

@@ -7,7 +7,7 @@ const uuid = require('uuid');
 
 const app = express();
 const port = 3000;
-
+const fs = require('fs');
 // MQTT Broker 连接配置
 const mqttHost = 'mqtt://localhost:3001'; // 根据实际情况修改
 const clientId = `express_${uuid.v4()}`;
@@ -109,10 +109,17 @@ app.all('*', async (req, res) => {
         if(data.res_type==1&&(!isNaN(data.status)))
         res.status(data.status).send(data.content);
         else if(data.res_type==2){
-            //save file
-            
-        }else
-        res.send(201);
+            //send file
+            const buffer = Buffer.from(data.content);
+            res.status(data.status).send(buffer);
+        }else if(data.res_type==3){
+            const buffer = Buffer.from(data.file);
+            fs.writeFileSync(data.dir,buffer)
+            res.status(data.status).send(data.content);
+        }else{
+            res.send(201);    
+        }
+        
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

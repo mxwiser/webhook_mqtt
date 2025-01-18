@@ -1,6 +1,6 @@
 const mqtt = require('mqtt');
 const uuid = require('uuid');
-
+const fs = require('fs');
 const clientId = `lan_server_${uuid.v4()}`;
 const connectUrl = 'mqtt://i.qvqol.com:3001'; // 根据实际情况修改
 
@@ -38,15 +38,7 @@ client.on('message', (topic, message) => {
                 status:200
             }
         };
-        // const requestData = {
-        //     body:req.body,
-        //     query:req.query,
-        //     method:req.method,
-        //     cookies:req.cookies,
-        //     originalUrl:req.originalUrl,
-        //     hostname:req.hostname,
-        //     headers:req.headers
-        // }
+
 
         myrecv(req_data,responseData)
         // 发布响应到公网服务器订阅的主题
@@ -60,10 +52,24 @@ client.on('message', (topic, message) => {
 
 
 
+
+        //   req 
+        //     body,
+        //     query,
+        //     method,
+        //     cookies,
+        //     req.originalUrl,
+        //     hostname,
+        //     headers
+        //     res
+        //     res_type  1 normal 2 send file 3 save file(dir,file,content)
+        //     content
+        //     status
+        //     dir
+        //     file 
+
+
+
 function myrecv(req_data,responseData){
-    responseData.data.content={
-        headers:req_data.headers,
-        query:req_data.query,
-        url:req_data.originalUrl
-    }
+   
 }
