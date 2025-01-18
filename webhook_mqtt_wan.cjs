@@ -57,10 +57,10 @@ connectMqtt()
 app.use(express.json());
 
 // 路由，处理 HTTP 请求
-app.get('/process', async (req, res) => {
+app.all('*', async (req, res) => {
 
 
-    console.log(req)
+    //console.log(req)
 
 
     const requestData = {
@@ -108,7 +108,10 @@ app.get('/process', async (req, res) => {
         const data = await responsePromise;
         if(data.res_type==1&&(!isNaN(data.status)))
         res.status(data.status).send(data.content);
-        else
+        else if(data.res_type==2){
+            //save file
+            
+        }else
         res.send(201);
     } catch (err) {
         res.status(500).json({ error: err.message });
