@@ -38,8 +38,6 @@ client.on('message', (topic, message) => {
                 status:200
             }
         };
-
-
         myrecv(req_data,responseData)
         // 发布响应到公网服务器订阅的主题
         client.publish('response_topic', JSON.stringify(responseData), (err) => {
@@ -49,7 +47,6 @@ client.on('message', (topic, message) => {
         });
     }
 });
-
 
 
 

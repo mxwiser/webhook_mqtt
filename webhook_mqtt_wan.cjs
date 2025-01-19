@@ -4,10 +4,10 @@ const {aedes} = require('./broker.js')
 const express = require('express');
 const mqtt = require('async-mqtt');
 const uuid = require('uuid');
-
 const app = express();
 const port = 3000;
 const fs = require('fs');
+const {service} = require('./loc_axios.cjs')
 // MQTT Broker 连接配置
 const mqttHost = 'mqtt://localhost:3001'; // 根据实际情况修改
 const clientId = `express_${uuid.v4()}`;
@@ -24,6 +24,7 @@ const connectMqtt = async () => {
         reconnectPeriod: 1000,
     });
     await mqttClient.subscribe('response_topic');
+    //await mqttClient.subscribe('request_proxy_topic');
     console.log('Connected to MQTT Broker and subscribed to response_topic');
 };
 
@@ -43,10 +44,30 @@ const handleResponse = async (topic, message) => {
     }
 };
 
+
+
+// const handleProxyRequest = async (topic, message) => {
+//     const payload = JSON.parse(message.toString());
+//     if (topic === 'request_proxy_topic') {
+//            const  res = await service(payload.data)
+
+//         try {
+//             await mqttClient.publish('request_proxy_topic', JSON.stringify({
+//                 correlationId:payload.correlationId,
+//                 data:res.data
+//             }), { qos: 1 });
+//         } catch (err) {
+//             console.error('Error publishing message:', err);
+//         }
+//     }
+// }
+
+
 // 连接到 MQTT Broker 并设置消息处理
 connectMqtt()
     .then(() => {
         mqttClient.on('message', handleResponse);
+        // mqttClient.on('message', handleProxyRequest);
     })
     .catch(err => {
         console.error('MQTT connection error:', err);
