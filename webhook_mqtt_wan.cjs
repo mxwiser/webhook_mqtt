@@ -5,18 +5,18 @@ const express = require('express');
 const mqtt = require('async-mqtt');
 const uuid = require('uuid');
 const app = express();
-const port = 3000;
+
 const fs = require('fs');
-const {service} = require('./loc_axios.cjs')
+const logger = require('./logger.cjs')
+
+let wh_timeout=5000
 // MQTT Broker 连接配置
 //const mqttHost = 'mqtt://localhost:3001'; // 根据实际情况修改
 const clientId = `express_${uuid.v4()}`;
-
-
 let mqttClient;
 
 // 连接到 MQTT Broker
-const connectMqtt = async (mqttHost) => {
+const connectMqtt = async (connectUrl) => {
     mqttClient =  mqtt.connect(connectUrl, {
         clientId,
         clean: true,
@@ -25,7 +25,7 @@ const connectMqtt = async (mqttHost) => {
     });
     await mqttClient.subscribe('response_topic');
     //await mqttClient.subscribe('request_proxy_topic');
-    console.log('Connected to MQTT Broker and subscribed to response_topic');
+    logger.log('Connected to MQTT Broker and subscribed to response_topic');
 };
 
 // 存储等待的响应
@@ -45,19 +45,20 @@ const handleResponse = async (topic, message) => {
 };
 
 
-module.exports.init= (webhookIp,webhookPort,mqttHost)=>{
+module.exports.init= (webhookIp,webhookPort,mqttHost,timeout)=>{
+    wh_timeout = timeout
     connectMqtt(mqttHost)
     .then(() => {
         mqttClient.on('message', handleResponse);
         // mqttClient.on('message', handleProxyRequest);
     })
     .catch(err => {
-        console.error('MQTT connection error:', err);
+        logger.error('MQTT connection error:', err);
         process.exit(1);
 
     });
     app.listen(webhookPort,webhookIp, () => {
-        console.log(`Express server listening at http://${webhookIp}:${webhookPort}`);
+        logger.log(`Express server listening at http://${webhookIp}:${webhookPort}`);
     });
 }
 
@@ -72,7 +73,7 @@ app.use(express.json());
 app.all('*', async (req, res) => {
 
 
-    //console.log(req)
+    //logger.log(req)
 
 
     const requestData = {
@@ -90,7 +91,7 @@ app.all('*', async (req, res) => {
     }
 
 
-    //console.log(req.headers)
+    //logger.log(req.headers)
 
     const correlationId = uuid.v4();
 
@@ -99,13 +100,13 @@ app.all('*', async (req, res) => {
         pendingResponses.set(correlationId, resolve);
 
         // 设置超时
-        const timeout = 5000; // 5秒
+       
         const timeoutId = setTimeout(() => {
             if (pendingResponses.has(correlationId)) {
                 pendingResponses.delete(correlationId);
                 reject(new Error('Processing timeout'));
             }
-        }, timeout);
+        }, wh_timeout);
     });
 
     // 发布消息到局域网服务器订阅的主题
@@ -116,7 +117,7 @@ app.all('*', async (req, res) => {
   
         }), { qos: 1 });
     } catch (err) {
-        console.error('Error publishing message:', err);
+        logger.error('Error publishing message:', err);
         res.status(500).json({ error: 'Internal Server Error' });
         return;
     }
