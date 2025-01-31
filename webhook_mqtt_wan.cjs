@@ -17,7 +17,7 @@ let mqttClient;
 
 // 连接到 MQTT Broker
 const connectMqtt = async () => {
-    mqttClient = await mqtt.connect(connectUrl, {
+    mqttClient =  mqtt.connect(connectUrl, {
         clientId,
         clean: true,
         connectTimeout: 4000,
@@ -94,6 +94,12 @@ app.all('*', async (req, res) => {
         headers:req.headers
     }
 
+    if(!req.headers.subtopic){
+        req.headers.subtopic=''
+    }
+
+
+    //console.log(req.headers)
 
     const correlationId = uuid.v4();
 
@@ -113,7 +119,7 @@ app.all('*', async (req, res) => {
 
     // 发布消息到局域网服务器订阅的主题
     try {
-        await mqttClient.publish('request_topic', JSON.stringify({
+        await mqttClient.publish('request_topic'+req.headers.subtopic, JSON.stringify({
             correlationId,
             data:requestData
   
