@@ -3,12 +3,13 @@
     "aedes": "^0.51.3",
     "async-mqtt": "^2.6.3",
     "express": "^4.21.2",
-    "uuid": "^11.0.5"
+    "uuid": "^11.0.5",
+    "wh2mqtt-proxy": "^1.1.0"
   },
   "name": "wh2mqtt-proxy",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Relay HTTP webhooks to MQTT",
-  "main": "index.js",
+  "main": "index.cjs",
   "keywords": [
     "webhook",
     "mqtt",
