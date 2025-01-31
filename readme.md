@@ -75,3 +75,5 @@ wh2_clientC.createHook('client_3',(req,res)=>{
 },'nameC')
 
 ```
+
+## Due to personal busy schedule, please refer to the source code for more details.
