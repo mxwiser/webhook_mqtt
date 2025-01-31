@@ -2,8 +2,17 @@
   "dependencies": {
     "aedes": "^0.51.3",
     "async-mqtt": "^2.6.3",
-    "axios": "^1.7.9",
     "express": "^4.21.2",
     "uuid": "^11.0.5"
-  }
+  },
+  "name": "webhook-mqtt",
+  "version": "1.0.0",
+  "description": "Relay HTTP webhooks to MQTT",
+  "main": "index.js",
+  "keywords": [
+    "webhook",
+    "mqtt",
+    "p2p"
+  ],
+  "license": "MIT"
 }
