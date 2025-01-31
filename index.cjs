@@ -34,10 +34,10 @@ class Webhook_mqtt_wan {
    * @param {number} mqttPort - Broker port number
    * @returns {void}
    */
-  createBroker(mqttIp, mqttPort) {
+  createBroker( mqttPort) {
     const { init } = require('./broker.cjs');
-    init(mqttPort, mqttIp);
-    this.connectMqttServer('mqtt://' + mqttIp + ':' + mqttPort);
+    init(mqttPort);
+    this.connectMqttServer('mqtt://' + '127.0.0.1' + ':' + mqttPort);
   }
 }
 

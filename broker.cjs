@@ -2,9 +2,9 @@
 const aedes = require('aedes')();
 const logger = require('./logger.cjs')
 const server = require('net').createServer(aedes.handle);
-module.exports.init=(port,host)=>{
-    server.listen(port,host, function () {
-        logger.log(`Aedes MQTT Broker listening on port ${host}:${port}`);
+module.exports.init=(port)=>{
+    server.listen(port, function () {
+        logger.log(`Aedes MQTT Broker listening on port ${port}`);
     });
 }
 
