@@ -11,6 +11,9 @@ declare module 'wh2mqt-proxy' {
       createHook(clientId: string, callback: (req: any, res: any) => boolean): void;
     }
   
-
+    export const Webhook_mqtt: {
+      wan: typeof Webhook_mqtt_wan;
+      lan: typeof Webhook_mqtt_lan;
+    };
 
   }

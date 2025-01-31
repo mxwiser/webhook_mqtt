@@ -15,7 +15,7 @@ const wh2mqtt = require("wh2mqtt-proxy")
 //Get server object.  Webhook_mqtt_wan(webhookIp,webhookPort,timeout=5000)
 const wh2_server =new wh2mqtt.Webhook_mqtt_wan(ip,webhookPort)
 
-//Start Proxy-Server createBroker(mqttIp,mqttPort) or connectMqttServer(mqttUrl='mqtt:://ip:port')
+//Start Proxy-Server createBroker(mqttPort) or connectMqttServer(mqttUrl='mqtt:://ip:port')
 wh2_server.createBroker(mqttPort)
 
 //Get client object. Webhook_mqtt_lan(mqttIp,mqttPort)
