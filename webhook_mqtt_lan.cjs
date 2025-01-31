@@ -1,8 +1,11 @@
 const mqtt = require('mqtt');
 const uuid = require('uuid');
 const fs = require('fs');
+
+const subtopic="inventory"
+
 const clientId = `lan_server_${uuid.v4()}`;
-const connectUrl = 'mqtt://i.qvqol.com:3001'; // 根据实际情况修改
+const connectUrl = 'mqtt://localhost:3001'; // 根据实际情况修改
 
 const client = mqtt.connect(connectUrl, {
     clientId,
@@ -14,7 +17,7 @@ const client = mqtt.connect(connectUrl, {
 client.on('connect', () => {
     console.log('Connected to MQTT Broker');
     // 订阅用于接收请求的主题
-    client.subscribe('request_topic', (err) => {
+    client.subscribe('request_topic'+subtopic, (err) => {
         if (!err) {
             console.log('Subscribed to request_topic');
         }
@@ -23,7 +26,7 @@ client.on('connect', () => {
 
 // 处理来自公网服务器的请求
 client.on('message', (topic, message) => {
-    if (topic === 'request_topic') {
+    if (topic === 'request_topic'+subtopic) {
         const payload = JSON.parse(message.toString());
         const correlationId = payload.correlationId;
         const req_data = payload.data;
