@@ -1,12 +1,11 @@
 // broker.js
 const aedes = require('aedes')();
 const server = require('net').createServer(aedes.handle);
-const port = 3001;
-
-// 启动 Aedes Broker
-server.listen(port, function () {
-    console.log(`Aedes MQTT Broker listening on port ${port}`);
-});
+module.exports.init=(port,host)=>{
+    server.listen(port,host, function () {
+        console.log(`Aedes MQTT Broker listening on port ${host}:${port}`);
+    });
+}
 
 // 处理订阅事件
 aedes.on('subscribe', function (subscriptions, client) {

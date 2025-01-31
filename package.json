@@ -5,7 +5,7 @@
     "express": "^4.21.2",
     "uuid": "^11.0.5"
   },
-  "name": "webhook-mqtt",
+  "name": "wh2mqtt-proxy",
   "version": "1.0.0",
   "description": "Relay HTTP webhooks to MQTT",
   "main": "index.js",

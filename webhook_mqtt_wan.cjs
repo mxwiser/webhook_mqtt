@@ -1,5 +1,5 @@
 
-const {aedes} = require('./broker.js')
+
 // server.js
 const express = require('express');
 const mqtt = require('async-mqtt');
@@ -9,14 +9,14 @@ const port = 3000;
 const fs = require('fs');
 const {service} = require('./loc_axios.cjs')
 // MQTT Broker 连接配置
-const mqttHost = 'mqtt://localhost:3001'; // 根据实际情况修改
+//const mqttHost = 'mqtt://localhost:3001'; // 根据实际情况修改
 const clientId = `express_${uuid.v4()}`;
-const connectUrl = `${mqttHost}`;
+
 
 let mqttClient;
 
 // 连接到 MQTT Broker
-const connectMqtt = async () => {
+const connectMqtt = async (mqttHost) => {
     mqttClient =  mqtt.connect(connectUrl, {
         clientId,
         clean: true,
@@ -45,26 +45,8 @@ const handleResponse = async (topic, message) => {
 };
 
 
-
-// const handleProxyRequest = async (topic, message) => {
-//     const payload = JSON.parse(message.toString());
-//     if (topic === 'request_proxy_topic') {
-//            const  res = await service(payload.data)
-
-//         try {
-//             await mqttClient.publish('request_proxy_topic', JSON.stringify({
-//                 correlationId:payload.correlationId,
-//                 data:res.data
-//             }), { qos: 1 });
-//         } catch (err) {
-//             console.error('Error publishing message:', err);
-//         }
-//     }
-// }
-
-
-// 连接到 MQTT Broker 并设置消息处理
-connectMqtt()
+module.exports.init= (webhookIp,webhookPort,mqttHost)=>{
+    connectMqtt(mqttHost)
     .then(() => {
         mqttClient.on('message', handleResponse);
         // mqttClient.on('message', handleProxyRequest);
@@ -72,7 +54,16 @@ connectMqtt()
     .catch(err => {
         console.error('MQTT connection error:', err);
         process.exit(1);
+
     });
+    app.listen(webhookPort,webhookIp, () => {
+        console.log(`Express server listening at http://${webhookIp}:${webhookPort}`);
+    });
+}
+
+
+
+
 
 // 中间件，用于解析 JSON 请求体
 app.use(express.json());
@@ -152,7 +143,4 @@ app.all('*', async (req, res) => {
     }
 });
 
-// 启动服务器
-app.listen(port, () => {
-    console.log(`Express server listening at http://localhost:${port}`);
-});
+
