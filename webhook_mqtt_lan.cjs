@@ -42,7 +42,7 @@ client.on('message', (topic, message) => {
             return
         client.publish('response_topic', JSON.stringify(responseData), (err) => {
             if (err) {
-                logger.error('Error publishing response:', err);
+                logger.log('Error publishing response:', err);
             }
         });
     }

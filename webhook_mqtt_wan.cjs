@@ -53,7 +53,7 @@ module.exports.init= (webhookIp,webhookPort,mqttHost,timeout)=>{
         // mqttClient.on('message', handleProxyRequest);
     })
     .catch(err => {
-        logger.error('MQTT connection error:', err);
+        logger.log('MQTT connection error:', err);
         process.exit(1);
 
     });
@@ -117,7 +117,7 @@ app.all('*', async (req, res) => {
   
         }), { qos: 1 });
     } catch (err) {
-        logger.error('Error publishing message:', err);
+        logger.log('Error publishing message:', err);
         res.status(500).json({ error: 'Internal Server Error' });
         return;
     }
