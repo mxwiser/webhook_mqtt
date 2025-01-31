@@ -2,7 +2,8 @@
 declare module 'wh2mqt-proxy' {
     class Webhook_mqtt_wan {
       constructor(webhookIp: string, webhookPort: number, timeout?: number);
-      createBroker(mqttIp: string, mqttPort: number): void;
+      createBroker( mqttPort: number): void;
+      connectMqttServer(mqttHost:string):void;
     }
   
     class Webhook_mqtt_lan {
@@ -10,5 +11,6 @@ declare module 'wh2mqt-proxy' {
       createHook(clientId: string, callback: (req: any, res: any) => boolean): void;
     }
   
+
 
   }
