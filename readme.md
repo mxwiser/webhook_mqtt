@@ -26,7 +26,7 @@ wh2_client.createHook('client_a',(req,res)=>{
     return false
 })
 
-//Then the browser to http://192.168.8.102:3000/, You will see the "Hi, I come from the MQTT client."  displayed on the page" .
+//Then the browser to http://ip:webhookPort/, You will see the "Hi, I come from the MQTT client."  displayed on the page" .
 
 ```
 ---

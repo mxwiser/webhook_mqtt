@@ -8,7 +8,7 @@
   },
   
   "name": "wh2mqtt-proxy",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Relay HTTP webhooks to MQTT",
   "main": "index.cjs",
   "types": "index.d.ts",
